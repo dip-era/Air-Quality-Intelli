@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Air Quality Intelligence</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="glass-panel">
+            <h1>Urban Air Quality Intelligence</h1>
+            <div class="controls">
+                <select id="city-select">
+                    <option value="delhi">Delhi</option>
+                    <option value="guwahati">Guwahati</option>
+                </select>
+                <button id="refresh-btn">Live Analysis</button>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <div class="left-panel">
+                <div class="glass-panel metric-card" id="aqi-card">
+                    <h3>Current AQI (PM2.5)</h3>
+                    <div class="value" id="aqi-val">--</div>
+                    <div class="sub-value" id="pm10-val">PM10: --</div>
+                </div>
+                
+                <div class="glass-panel metric-card">
+                    <h3>Weather Conditions</h3>
+                    <div class="weather-grid">
+                        <div><span class="label">Temp:</span> <span id="temp-val">--</span></div>
+                        <div><span class="label">Wind:</span> <span id="wind-val">--</span></div>
+                        <div><span class="label">Humidity:</span> <span id="humidity-val">--</span></div>
+                    </div>
+                </div>
+
+                <div class="glass-panel ai-panel">
+                    <h3>✨ AI Attribution Engine</h3>
+                    <div class="ai-content" id="ai-attribution">
+                        <div class="loading-spinner" id="ai-loading" style="display: none;"></div>
+                        <p class="ai-text">Click 'Live Analysis' to generate geospatial insights.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel ai-panel warning-panel">
+                    <h3>⚠️ Health Advisory</h3>
+                    <div class="ai-content" id="ai-advisory">
+                        <p class="ai-text">Waiting for AI...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="glass-panel map-container">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
