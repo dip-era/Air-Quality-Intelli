@@ -1,0 +1,6 @@
+requests
+python-dotenv
+supabase
+fastapi
+uvicorn
+certifi
