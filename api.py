@@ -1,15 +1,17 @@
 import os
 import certifi
 os.environ["SSL_CERT_FILE"] = certifi.where()
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from supabase import create_client, Client
 from dotenv import load_dotenv
+from ai_agents import generate_city_insights
 
 # Load environment variables
 load_dotenv()
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from supabase import create_client, Client
-from ai_agents import generate_city_insights
-
 
 # Initialize Supabase client
 url = os.environ.get("SUPABASE_URL")
@@ -26,18 +28,21 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for frontend integration
+# Enable CORS (Allows frontend to communicate with API)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # For hackathon MVP, allow all origins
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Serve the Frontend statically (Crucial for Render Deployment)
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
 @app.get("/")
-def read_root():
-    return {"status": "ok", "message": "Air Quality Intelligence Gateway is running."}
+def serve_frontend():
+    return FileResponse("frontend/index.html")
 
 @app.get("/api/live-aqi/{city}")
 def get_live_aqi(city: str):
@@ -146,59 +151,4 @@ def get_ai_insights(city: str):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-def calculate_us_epa_aqi(concentration, pollutant="PM2.5"):
-    """
-    Calculates the AQI based on US EPA standards for PM2.5 and PM10.
-    """
-    if pollutant == "PM2.5":
-        # EPA standard: Truncate PM2.5 to 1 decimal place
-        c = int(float(concentration) * 10) / 10.0
-        
-        # Format: (C_low, C_high, I_low, I_high)
-        breakpoints = [
-            (0.0, 12.0, 0, 50),
-            (12.1, 35.4, 51, 100),
-            (35.5, 55.4, 101, 150),
-            (55.5, 150.4, 151, 200),
-            (150.5, 250.4, 201, 300),
-            (250.5, 350.4, 301, 400),
-            (350.5, 500.4, 401, 500)
-        ]
-        
-    elif pollutant == "PM10":
-        # EPA standard: Truncate PM10 to an integer
-        c = int(float(concentration))
-        
-        breakpoints = [
-            (0, 54, 0, 50),
-            (55, 154, 51, 100),
-            (155, 254, 101, 150),
-            (255, 354, 151, 200),
-            (355, 424, 201, 300),
-            (425, 504, 301, 400),
-            (505, 604, 401, 500)
-        ]
-    else:
-        raise ValueError("Pollutant must be 'PM2.5' or 'PM10'")
 
-    # Find the matching bracket and apply linear interpolation
-    for c_low, c_high, i_low, i_high in breakpoints:
-        if c_low <= c <= c_high:
-            aqi = ((i_high - i_low) / (c_high - c_low)) * (c - c_low) + i_low
-            return round(aqi)
-
-    # Return max index for extreme pollution beyond the standard scale
-    return 500
-
-
-# --- Usage Example for api.py ---
-if __name__ == "__main__":
-    raw_pm25 = 12.3
-    raw_pm10 = 25.0
-    
-    pm25_aqi = calculate_us_epa_aqi(raw_pm25, "PM2.5")
-    pm10_aqi = calculate_us_epa_aqi(raw_pm10, "PM10")
-    
-    print(f"PM2.5 AQI: {pm25_aqi}") # Outputs: 51
-    print(f"PM10 AQI:  {pm10_aqi}") # Outputs: 23
