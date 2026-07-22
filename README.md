@@ -1,6 +1,6 @@
 # Air Quality Intelligence Platform 
 
-**A Next-Generation Geospatial Source Attribution & Intervention Engine**
+**A Geospatial Source Attribution & Intervention Engine**
 
 **Live Demo** [https://drive.google.com/file/d/1YPeyasHlbcL-65DB1C--nejh4v1ux3h5/view?usp=sharing](https://drive.google.com/file/d/1YPeyasHlbcL-65DB1C--nejh4v1ux3h5/view?usp=sharing)
 
