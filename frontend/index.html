@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="glass-panel">
+            <h1>Air Quality Intelligence</h1>
+            <div class="controls">
+                <select id="city-select">
+                    <option value="delhi">Delhi</option>
+                    <option value="kanpur">Kanpur</option>
+                    <option value="mumbai">Mumbai</option>
+                    <option value="guwahati">Guwahati</option>
+                    <option value="chennai">Chennai</option>
+                    <option value="bengaluru">Bengaluru</option>
+                    <option value="shimla">Shimla</option>
+                </select>
+                <button id="refresh-btn">Generate Interventions</button>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <div class="left-panel">
+                <div class="glass-panel metric-card" id="aqi-card">
+                    <h3>CURRENT AQI</h3>
+                    <div class="value" id="aqi-val">--</div>
+                    <div class="sub-value" id="pm10-val">PM2.5: -- | PM10: --</div>
+                </div>
+                
+                <div class="glass-panel metric-card">
+                    <h3>Meteorological Feed</h3>
+                    <div class="weather-grid">
+                        <div><span class="label">Temp:</span> <span id="temp-val">--</span></div>
+                        <div><span class="label">Wind:</span> <span id="wind-val">--</span></div>
+                        <div><span class="label">Humidity:</span> <span id="humidity-val">--</span></div>
+                    </div>
+                </div>
+
+                <div class="glass-panel ai-panel">
+                    <h3>Source Attribution</h3>
+                    <div class="ai-content" id="ai-attribution">
+                        <div class="loading-spinner" id="ai-loading" style="display: none;"></div>
+                        <p class="ai-text">Click 'Generate Interventions' to run the AI engine.</p>
+                        <p class="ai-subtext" id="ai-confidence"></p>
+                    </div>
+                </div>
+                
+                <div class="glass-panel ai-panel warning-panel">
+                    <h3>Actionable Interventions</h3>
+                    <div class="ai-content" id="ai-enforcement">
+                        <ul class="action-list" id="action-list">
+                            <li class="ai-text">Waiting for AI...</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="glass-panel ai-panel">
+                    <h3>Hyperlocal Forecast</h3>
+                    <div class="ai-content" id="ai-forecast">
+                        <p class="ai-text">Waiting for AI...</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel ai-panel warning-panel">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <h3 style="margin-bottom: 0;">Citizen Advisory</h3>
+                        <select id="advisory-lang-select" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: rgba(15, 23, 42, 0.8); color: white; border: 1px solid var(--glass-border); border-radius: 4px; cursor: pointer;">
+                            <option value="english">English</option>
+                            <option value="local">Local Language</option>
+                        </select>
+                    </div>
+                    <div class="ai-content">
+                        <p class="ai-text" id="ai-advisory-text">Waiting for AI...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="glass-panel map-container">
+                    <div id="map"></div>
+                    <div class="legend">
+                        <div><span class="dot" style="background: #3b82f6;"></span> Hospital</div>
+                        <div><span class="dot" style="background: #10b981;"></span> School</div>
+                        <div><span class="dot" style="background: #ef4444;"></span> Factory</div>
+                        <div><span class="dot" style="background: #f97316; border: 1px solid #c2410c;"></span> Traffic Incident</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
