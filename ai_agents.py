@@ -86,7 +86,8 @@ def generate_city_insights(city_name: str, aqi_data: dict, geospatial_data: list
         ],
         "citizen_advisory": {{
             "english": "Public health warning in English",
-            "local_language": "Public health warning translated to the primary local language of {city_name}, written strictly in its native script (e.g. Devanagari for Hindi/Pahari, Kannada for Bengaluru, etc.), avoiding Romanized or English alphabet transliteration."        }}
+            "local_language": "Public health warning translated to the primary local language of {city_name}"
+        }}
     }}
     
     IMPORTANT RULES FOR ENFORCEMENT RECOMMENDATIONS:
